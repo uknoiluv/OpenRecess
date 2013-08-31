@@ -9,7 +9,6 @@ var express = require('express'),
     path = require('path'),
     passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
-    hbs  = require('express3-handlebars'),
     mongoose = require('mongoose'),
     MongoStore = require('connect-mongo')(express),
     config = require('./config/config.js');
@@ -21,11 +20,9 @@ var Game = require('./models/game.js');
 
 // Setup express server
 var app = express();
-app.engine('handlebars', hbs({defaultLayout: 'main'}));
 app.set('port', config.port);
 app.set('db', mongoose);
 app.set('views', __dirname + '/views');
-app.set('view engine', 'handlebars');
 app.use(express.favicon());
 app.use(express.static('public'));
 app.use(express.logger('dev'));
