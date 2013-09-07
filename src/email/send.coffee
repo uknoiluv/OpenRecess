@@ -17,7 +17,7 @@ server = email.server.connect
 message = email.message.create 
     text: "This is test of the OpenRecess mail server"
     from: "#{config.name} <#{config.email}>"
-    to: "#{config.name} <#{config.email}>"
+    to: "#{config.name} <#{config.email}>, 'dan sell' <dan.s.sell@gmail.com>"
     subject: "Testing Node.js email capabilities for OpenRecess"
  
 # message.attach "reading.png", "image/png", "reading-image.png"

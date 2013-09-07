@@ -10,6 +10,7 @@
     },
     "smtp": {
         "host": "smtp.gmail.com",
-        "ssl": true
+        "tls": true,
+        "port": 465
     }
 }

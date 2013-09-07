@@ -16,7 +16,10 @@
     "underscore": "~1.4.4",
     "crypto": "0.0.3",
     "moment": "~2.0.0",
-    "connect-mongo": "~0.3.2"
+    "connect-mongo": "~0.3.2",
+    "emailjs": "0.3.4",
+    "imap": "~0.8.2",
+    "mailparser": "~0.3.6"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
