@@ -17,10 +17,10 @@ server = email.server.connect
 message = email.message.create 
     text: "This is test of the OpenRecess mail server"
     from: "#{config.name} <#{config.email}>"
-    to: "#{config.name} <#{config.email}>", "'Dan Sell' <dan.s.sell@gmail.com>"
+    to: "#{config.name} <#{config.email}>"
     subject: "Testing Node.js email capabilities for OpenRecess"
  
-message.attach "reading.png", "image/png", "reading-image.png"
+# message.attach "reading.png", "image/png", "reading-image.png"
  
 server.send message, (err, message) ->
     return console.error err if err
