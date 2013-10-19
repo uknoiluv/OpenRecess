@@ -2,7 +2,7 @@
     "name": "OpenRecess",
     "email": "OpenRecess@gmail.com",
     "username": "OpenRecess@gmail.com",
-    "password": "you'reit",
+    "password": "testpassword",
     "imap": {
         "host": "imap.gmail.com",
         "port": 993,
