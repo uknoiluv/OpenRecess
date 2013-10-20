@@ -3,7 +3,8 @@ var mongoose = require('mongoose'),
     User = require('./user.js'),
     Message = require('./message.js'),
     Team = require('./team.js'),
-    Schema = mongoose.Schema;
+    Schema = mongoose.Schema,
+    emailSecret = require('./../config/config.js').emailSecret;
 
 var validatePresenceOf = function(value) {
   return value && value.length;
@@ -16,7 +17,7 @@ var validatePresenceOf = function(value) {
 
 // TODO: Alert we need to validate the gameTime on the client before sending to the model as a Date.
 var GameSchema = new Schema({
-  'invitedPlayers': Array, // make this an object of ObjectIds of users or user phone numbers
+  'invitedPlayers': [Schema.Types.ObjectId], // make this an object of ObjectIds of users or user phone numbers
   'manager': Schema.Types.ObjectId,
   'gameCode': Number,
   'createdAt': { type: Date, 'default': Date.now },
@@ -24,7 +25,7 @@ var GameSchema = new Schema({
   'gameDate': { type: Date, validate: [validatePresenceOf, 'please provide a game date'] },
   'gameTime': { type: String, validate: [validatePresenceOf, 'please provide a game time'] },  // TODO: change to date
   'gameName': { type: String, validate: [validatePresenceOf, 'please provide a game title'] },
-  'gameType': { type: String, validate: [validatePresenceOf, 'please choose a game type'] }, // eventually convert this into a foreign key for a collection of gameTypes 
+  'gameType': { type: String, validate: [validatePresenceOf, 'please choose a game type'] }, // eventually convert this into a foreign key for a collection of gameTypes
   // 'gameAddress': { type: String, validate: [validatePresenceOf, 'if you expect people to show up, you\'d better tell them where to go'] },
   'coord' : {
     'lat' : Number,
@@ -36,7 +37,7 @@ var GameSchema = new Schema({
   'playerLimit': Number,
   'minimumPlayersMet': Boolean,
   'playerLimitMet': Boolean,
-  'messages': Schema.Types.ObjectId
+  'messages': [Schema.Types.ObjectId]
 });
 
 GameSchema.pre('save', function(next) {
