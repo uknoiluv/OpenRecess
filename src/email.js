@@ -33,76 +33,67 @@ function md5(str) {
  * sign = md5('NO-'+gameId+'-'+userId+secret);
  * secret is enviroment value emailSecret
  */
+
+ //testing parser
+/*
+ console.log(parseCode('###YES-524f25c50c7df84815000002-524f266342cb0fbe15000005-31b4a1e5935bebd3a0cf65a60127307d###   '));
+ console.log(parseCode('###NO-524f25c50c7df84815000002-524f266342cb0fbe15000005-c38ba6175c499bfcfb44f82b16ce8fc5###   '));
+ */
 function parseCode(code) {
-  if(/^###(YES|NO)\-([0-9a-f]+)\-([0-9a-f]+)\-([0-9a-f]+)###/i.test(code)){
+  if (/^###(YES|NO)\-([0-9a-f]+)\-([0-9a-f]+)\-([0-9a-f]+)###/i.test(code)) {
     var s = /^###([ysnoa-f0-9\-]+)/i.exec(code),
       tokens = s[1].split('-');
 
-    if(/^(YES|NO)$/.test(tokens[0])){
-      if(tokens[3] === md5(''+tokens[0]+'-'+tokens[1]+'-'+tokens[2]+'-'+config.emailSecret)){
+    if (/^(YES|NO)$/.test(tokens[0])) {
+      if (tokens[3] === md5('' + tokens[0] + '-' + tokens[1] + '-' + tokens[2] + '-' + config.emailSecret)) {
         return {
-          'answer':tokens[0],
-          'gameId':tokens[1],
-          'userId':tokens[2]
+          'answer': tokens[0],
+          'gameId': tokens[1],
+          'userId': tokens[2]
         }
       }
     }
   }
-
   return false;
-};
-
-function createCode(answer,gameId, userId){
-  return '###'+answer+'-'+gameId+'-'+userId+'-'+md5(answer+'-'+gameId+'-'+userId+'-'+config.emailSecret);
-}
-function createYesCode(gameId, userId){
-  return createCode('YES',gameId,userId);
-}
-function createNoCode(answer,gameId, userId){
-  return createCode('NO',gameId,userId);
 }
 
-/*
-console.log(parseCode('###YES-524f25c50c7df84815000002-524f266342cb0fbe15000005-31b4a1e5935bebd3a0cf65a60127307d###   '));
-console.log(parseCode('###NO-524f25c50c7df84815000002-524f266342cb0fbe15000005-c38ba6175c499bfcfb44f82b16ce8fc5###   '));
-*/
+function createCode(answer, gameId, userId) {
+  return '###' + answer + '-' + gameId + '-' + userId + '-' + md5(answer + '-' + gameId + '-' + userId + '-' + config.emailSecret);
+}
+function createYesCode(gameId, userId) {
+  return createCode('YES', gameId, userId);
+}
+function createNoCode(gameId, userId) {
+  return createCode('NO', gameId, userId);
+}
 
-function addUserToGame(game,user,callback){
-  Game.findOneAndUpdate( {
-      _id:game._id
+function addUserToGame(game, user, callback) {
+  Game.findOneAndUpdate({
+      _id: game._id
     },
     {
-      $pull : { invitedPlayers : user._id },
-      $push : { confirmedPlayers : user._id },
-      $inc : { confirmedPlayersCount : 1 }
+      $pull: { invitedPlayers: user._id },
+      $push: { confirmedPlayers: user._id },
+      $inc: { confirmedPlayersCount: 1 }
     },
-    function(err, thisGame){
-      if(err) throw 'Error';
-      if (!thisGame) {
-        exports.sendSMS('Thanks for the message. Either you already RSVP\'d to this game or you aren\'t authorized to join. ~OpenRecess.com.', digits, twilioPhoneNumber);
-      } else {
-        var message = 'Game on for ' + thisGame.gameType + ' #' + thisGame.gameCode + ' on ' + moment(thisGame.gameDate).format("L") + ' at ' + thisGame.gameTime + '. Stay tuned for more text message updates.';
-        if (message.length > 144) {
-          exports.sendSMS(message, digits, twilioPhoneNumber);
-        } else {
-          exports.sendSMS(message + ' ~OpenRecess.com', digits, twilioPhoneNumber);
-        }
-      }
+    function (err, thisGame) {
+      if (err) throw 'Error';
+        exports.sendEmail(user.email, 'Game participation confirmed','Thanks for your reply. ' + game.gameType + ' will be better with you!.', callback);
     }
   );
-};
-function removeUserFromGame(game,user,callback){
+}
+function removeUserFromGame(game, user, callback) {
   Game.findOneAndUpdate({
-    _id : game._id
-  },
-  {
-    $pull : {invitedPlayers : user._id}
-  }, function(err, data){
-    if (err) throw err;
-    console.log(data);
-    //change
-    exports.sendSMS('Thanks for your reply. ' + data.gameType + ' won\'t be the same without you.', digits, twilioPhoneNumber);
-  });
+      _id: game._id
+    },
+    {
+      $pull: {invitedPlayers: user._id}
+    }, function (err, data) {
+      if (err) throw err;
+      console.log(data);
+      //change
+      exports.sendEmail(user.email, 'Game participation canceled','Thanks for your reply. ' + game.gameType + ' won\'t be the same without you.', callback);
+    });
 }
 
 function processMessage(client, UID) {
@@ -110,43 +101,56 @@ function processMessage(client, UID) {
   client.createMessageStream(UID).pipe(mailparser);
   mailparser.on("end", function (mail_object) {
 //        console.log(mail_object);
-    var replyParsed = parseCode(mail_object.text);
-    if(replyParsed){
-      if(/^(YES|NO)$/i.test(replyParsed.answer)){
-      async.parallel({
-        'userFound':function(cb){
-          User.findOne({'_id':replyParsed.userId},cb);
-        },
-        'gameFound':function(cb){
-          Game.findOne({'_id':replyParsed.gameId},cb);
-        }
-      },function(err,params){
-        if(err){
-          console.error(err);
+      var replyParsed = parseCode(mail_object.text);
+      if (replyParsed) {
+        if (/^(YES|NO)$/i.test(replyParsed.answer)) {
+          async.parallel({
+            'userFound': function (cb) {
+              User.findOne({'_id': replyParsed.userId}, cb);
+            },
+            'gameFound': function (cb) {
+              Game.findOne({'_id': replyParsed.gameId}, cb);
+            }
+          }, function (err, params) {
+            if (err) {
+              console.error(err);
+            } else {
+              if (params.userFound && params.gameFound) {
+                switch (replyParsed.answer.toLowerCase()) {
+                case 'yes':
+                  addUserToGame(params.gameFound, params.userFound, console.error);
+                  break;
+                case 'no':
+                  removeUserFromGame(params.gameFound, params.userFound, console.error);
+                  break;
+                default:
+                  //deleting message because we cannot find proper answer from it
+                  client.deleteMessage(UID, function (err) {
+                    if (err) console.error(err);
+                  });
+                }
+              } else {
+                //no user or game delete message
+                client.deleteMessage(UID, function (err) {
+                  if (err) console.error(err);
+                });
+              }
+            }
+          });
         } else {
-          if(params.userFound && params.gameFound){
-
-
-          } else {
-          //deleting message because we cannot find game or user
-            client.deleteMessage(UID, function (err) {
-              if (err) console.error(err);
-            });
-          }
-        }
-      });
-      } else {
-        //strange answer...delete message
+          //strange answer...delete message
           client.deleteMessage(UID, function (err) {
             if (err) console.error(err);
           });
+        }
       }
-    } else {
-      client.deleteMessage(UID, function (err) {
-        if (err) console.error(err);
-      });
+      else {
+        client.deleteMessage(UID, function (err) {
+          if (err) console.error(err);
+        });
+      }
     }
-  });
+  );
 };
 
 
@@ -177,7 +181,7 @@ var email = require('emailjs'),
   smtp = email.server.connect({
     user: config.smtp.username,
     password: config.smtp.password,
-    host: config.smtp.host,
+    host: config.smtp.host
   });
 
 exports.sendEmail = function (to, subject, text, callback) {
@@ -190,28 +194,28 @@ exports.sendEmail = function (to, subject, text, callback) {
   smtp.send(message, callback);
 };
 
-exports.sendYesNoEmail = function(userObjOrId,gameObjOrId,callback){
+exports.sendYesNoEmail = function (userObjOrId, gameObjOrId, callback) {
   async.parallel({
-    'user':function(cb){
-      if(typeof userObjOrId === 'object'){
-        User.findOne({'_id':userObjOrId._id},cb);
+    'user': function (cb) {
+      if (typeof userObjOrId === 'object') {
+        User.findOne({'_id': userObjOrId._id}, cb);
         return;
       } else {
-        if(typeof userObjOrId === 'string'){
-          User.findOne({'_id':userObjOrId},cb);
+        if (typeof userObjOrId === 'string') {
+          User.findOne({'_id': userObjOrId}, cb);
           return;
         } else {
           cb(new Error('Wrong user type!'));
         }
       }
     },
-    'game':function(cb){
-      if(typeof gameObjOrId === 'object'){
-        Game.findOne({'_id':gameObjOrId._id},cb);
+    'game': function (cb) {
+      if (typeof gameObjOrId === 'object') {
+        Game.findOne({'_id': gameObjOrId._id}, cb);
         return;
       } else {
-        if(typeof userObjOrId === 'string'){
-          Game.findOne({'_id':gameObjOrId},cb);
+        if (typeof userObjOrId === 'string') {
+          Game.findOne({'_id': gameObjOrId}, cb);
           return;
         } else {
           cb(new Error('Wrong user type!'));
@@ -219,23 +223,23 @@ exports.sendYesNoEmail = function(userObjOrId,gameObjOrId,callback){
         }
       }
     }
-  },function(err,params){
-      if(err){
-        callback(err);
-      } else {
-        var text = 'Hello, '+params.user.display_name+'!+\n'+
-            'You have been invited to participate in game "'
-            +params.game.gameName+'"\n'+
-            'If you WANT to participate, reply to this email '+
-            'message with message that starts with this code: \n'+
-            '\n'+createYesCode(params.game._id,params.user._id)+
-            'If you DO NOT WANT to participate, reply to this email '+
-            'message with message that starts with this code: \n'
-            '\n'+createNoCode(params.game._id,params.user._id)
-        ;
-        //todo - you can add more text to this message...
-        exports.sendEmail(params.user.email, 'Participation in '+params.game.gameName, text, callback);
-      }
-  };
+  }, function (err, params) {
+    if (err) {
+      callback(err);
+    } else {
+      var text = 'Hello, ' + params.user.display_name + '!+\n' +
+        'You have been invited to participate in game "'
+        + params.game.gameName + '"\n' +
+        'If you WANT to participate, reply to this email ' +
+        'message with message that starts with this code: \n' +
+        '\n' + createYesCode(params.game._id, params.user._id) +
+        'If you DO NOT WANT to participate, reply to this email ' +
+        'message with message that starts with this code: \n'
+      '\n' + createNoCode(params.game._id, params.user._id)
+      ;
+      //todo - you can add more text to this message...
+      exports.sendEmail(params.user.email, 'Participation in ' + params.game.gameName, text, callback);
+    }
+  });
 };
 
