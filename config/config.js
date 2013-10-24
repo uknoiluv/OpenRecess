@@ -19,7 +19,8 @@ config.imap = {
 config.smtp = {
   "host":"smtp.gmail.com",
   "login": process.env.emailLogin || "openrecess@gmail.com",
-  "password": process.env.emailPassword || "testpassword"
+  "password": process.env.emailPassword || "testpassword",
+  "port": 465
 };
 
 

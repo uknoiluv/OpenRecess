@@ -178,10 +178,11 @@ exports.startServer = function () {
 
 //sending emails
 var email = require('emailjs'),
-  smtp = email.server.connect({
-    user: config.smtp.username,
+  server = email.server.connect({
+    user: config.smtp.login,
     password: config.smtp.password,
     host: config.smtp.host,
+    port: 465,
     ssl: true
   });
 
@@ -192,7 +193,7 @@ exports.sendEmail = function (to, subject, text, callback) {
     to: to,
     subject: subject
   });
-  smtp.send(message, callback);
+  server.send(message, callback);
 };
 
 exports.sendYesNoEmail = function (userObjOrId, gameObjOrId, callback) {
@@ -243,3 +244,14 @@ exports.sendYesNoEmail = function (userObjOrId, gameObjOrId, callback) {
     }
   });
 };
+
+
+//*/
+//testing email sending on start
+// exports.sendYesNoEmail("5196a1f4377bab3253000001", '5196aebb209aad7b54000001', function(err, messageSent){
+//     console.log(err);
+//     if(err) throw err;
+//     console.log(messageSent);
+// });
+//*/
+
