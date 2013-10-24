@@ -245,7 +245,14 @@ exports.sendYesNoEmail = function (userObjOrId, gameObjOrId, callback) {
   });
 };
 
+//*/
+//testing email sending on start
 exports.sendEmail('ostroumov095@gmail.com', 'test', 'test - open recess', function(err, messageSent){
     if(err) throw err;
     console.log(messageSent);
 });
+//*/
+
+
+
+
