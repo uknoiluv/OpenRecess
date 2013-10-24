@@ -183,7 +183,7 @@ var email = require('emailjs'),
     password: config.smtp.password,
     host: config.smtp.host,
     ssl: true,
-    port: 993
+    port: 465
   });
 
 exports.sendEmail = function (to, subject, text, callback) {
