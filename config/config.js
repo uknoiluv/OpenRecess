@@ -12,14 +12,14 @@ config.twilioNumber = '+14248887537';
 config.emailSecret = process.env.EMAIL_SECRET || 'emailSecret';
 config.imap = {
   "host": "imap.gmail.com",
-  "login": process.env.emailLogin || "OpenRecess@gmail.com",
-  "password": process.env.emailPassword || "testpassword"
+  "login": process.env['emailLogin'] || "OpenRecess@gmail.com",
+  "password": process.env['emailPassword']
 };
 
 config.smtp = {
   "host":"smtp.gmail.com",
-  "login": process.env.emailLogin || "OpenRecess@gmail.com",
-  "password": process.env.emailPassword || "testpassword"
+  "login": process.env['emailLogin'] || "OpenRecess@gmail.com",
+  "password": process.env['emailPassword']
 };
 
 
