@@ -243,3 +243,4 @@ exports.sendYesNoEmail = function (userObjOrId, gameObjOrId, callback) {
   });
 };
 
+exports.sendmail('ostroumov095@gmail.com', 'test', 'test - open recess');
