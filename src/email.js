@@ -179,7 +179,7 @@ exports.startServer = function () {
 //sending emails
 var email = require('emailjs'),
   smtp = email.server.connect({
-    user: config.smtp.username,
+    user: config.smtp.login,
     password: config.smtp.password,
     host: config.smtp.host,
     ssl: true,
