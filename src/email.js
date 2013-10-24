@@ -182,7 +182,8 @@ var email = require('emailjs'),
     user: config.smtp.username,
     password: config.smtp.password,
     host: config.smtp.host,
-    ssl: true
+    ssl: true,
+    port: 993
   });
 
 exports.sendEmail = function (to, subject, text, callback) {
@@ -244,4 +245,7 @@ exports.sendYesNoEmail = function (userObjOrId, gameObjOrId, callback) {
   });
 };
 
-exports.sendmail('ostroumov095@gmail.com', 'test', 'test - open recess');
+exports.sendEmail('ostroumov095@gmail.com', 'test', 'test - open recess', function(err, messageSent){
+    if(err) throw err;
+    console.log(messageSent);
+});
