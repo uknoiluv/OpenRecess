@@ -7,17 +7,20 @@ email = require "emailjs"
 # You need a config file with your email settings
 fs = require "fs"
 config = JSON.parse fs.readFileSync "#{process.cwd()}/config.json", "utf-8"
- 
+
 server = email.server.connect
     user: config.username
     password: config.password
     host: config.smtp.host
+    port: config.smtp.port
     ssl: config.smtp.ssl
- 
+
+console.log server
+
 message = email.message.create 
     text: "This is test of the OpenRecess mail server"
     from: "#{config.name} <#{config.email}>"
-    to: "#{config.name} <#{config.email}>, 'dan sell' <dan.s.sell@gmail.com>"
+    to: "#{config.name} <#{config.email}>, andrew <andrew.magliozzi@gmail.com>"
     subject: "Testing Node.js email capabilities for OpenRecess"
  
 # message.attach "reading.png", "image/png", "reading-image.png"
