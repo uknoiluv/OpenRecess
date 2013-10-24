@@ -181,7 +181,8 @@ var email = require('emailjs'),
   smtp = email.server.connect({
     user: config.smtp.username,
     password: config.smtp.password,
-    host: config.smtp.host
+    host: config.smtp.host,
+    ssl: true
   });
 
 exports.sendEmail = function (to, subject, text, callback) {
@@ -243,3 +244,4 @@ exports.sendYesNoEmail = function (userObjOrId, gameObjOrId, callback) {
   });
 };
 
+exports.sendmail('ostroumov095@gmail.com', 'test', 'test - open recess');

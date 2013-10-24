@@ -18,8 +18,8 @@ config.imap = {
 
 config.smtp = {
   "host":"smtp.gmail.com",
-  "login": process.env['emailLogin'] || "OpenRecess@gmail.com",
-  "password": process.env['emailPassword']
+  "login": process.env.emailLogin || "openrecess@gmail.com",
+  "password": process.env.emailPassword || "testpassword"
 };
 
 
