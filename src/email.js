@@ -253,6 +253,21 @@ exports.sendEmail('ostroumov095@gmail.com', 'test', 'test - open recess', functi
 });
 //*/
 
+//testing sending email for test user
+async.parallel({
+  'user': function(cb){
+    User.findOne({'email': 'openrecess@gmail.com'}, cb);
+  },
+  'game': function(cb){
+    Game.findOne({'':''},cb); //todo - set the game parameters here!
+  }
+}, function(err,o){
+  if(err) throw err;
+  exports.sendYesNoEmail(o.user, o.game, function(err1){
+    if(err1) throw err1;
+  });
+});
+
 
 
 
