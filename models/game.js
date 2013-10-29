@@ -17,7 +17,7 @@ var validatePresenceOf = function(value) {
 
 // TODO: Alert we need to validate the gameTime on the client before sending to the model as a Date.
 var GameSchema = new Schema({
-  'invitedPlayers': [Schema.Types.ObjectId], // make this an object of ObjectIds of users or user phone numbers
+  'invitedPlayers': [Schema.Types.ObjectId], // make this an object of ObjectIds of users or user email addresses
   'manager': Schema.Types.ObjectId,
   'gameCode': Number,
   'createdAt': { type: Date, 'default': Date.now },

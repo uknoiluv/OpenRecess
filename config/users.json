@@ -16,5 +16,14 @@
     "salt": "674417255693",
     "upcomingGames": [],
     "gamesPlayed": []
+  },
+    {
+    "email": "openrecess@gmail.com",
+    "phone": "+5555555555",
+    "display_name": "test user 3",
+    "hashed_password": "b15a1c85e49060cda1345e06cc2b6efac76685f5",
+    "salt": "674417255693",
+    "upcomingGames": [],
+    "gamesPlayed": []
   }
 ];
