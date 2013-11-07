@@ -4,7 +4,9 @@ var passport = require('passport'),
     users = require('./users.js'),
     moment = require('moment'),
     config = require('../config/config.js'),
-    teams = require('./teams.js');
+    teams = require('./teams.js'),
+    async = require('async'),
+    email = require('./lib/email.js');
 
 module.exports = function(app){
   var db = app.set('db');
@@ -126,9 +128,28 @@ module.exports = function(app){
       } else {
         console.log(thisGame);
         twil.sendSMS('Game on for ' + thisGame.gameType + '#' + thisGame.gameCode + ' on ' + moment(thisGame.gameDate).format('LL') + ' at ' + thisGame.gameTime + '. Stay tuned for more text message updates.', digits, twilioPhoneNumber);
+        async.parallel({
+          'game':function(cb){
+            cb(null, thisGame);
+          },
+          'user': function(cb){
+            users.findOne({'phone':digits},cb)
+          }
+        },function(err1,objFound){
+          if(err1){
+            return 'no such game found';
+          } else {
+            email.sendYesNoEmail(objFound.user, objFound.game, function(err2){
+              if(err2){
+                res.json(400, err2);
+              } else {
+                res.json(200, 'Done and done');
+              }
+            });
+          }
+        });
       }
     });
-    res.json(200, 'Done and done');
   });
 
   app.get('/games', function(req, res, next) {
@@ -177,6 +198,7 @@ var twilioPhoneNumber = config.twilioNumber;
         for (var i = 0; i < game.invitedPlayers.length; i++){
           console.log(gameMessage, game.invitedPlayers[i], twilioPhoneNumber);
           twil.sendSMS(gameMessage, game.invitedPlayers[i], twilioPhoneNumber, req, res);
+          //email.sendYesNoEmail() //todo! this
           // Add to message database a item with requester, number sent to, message, messageSID, event
       }
       res.json(200, 'Success');
