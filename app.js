@@ -84,4 +84,4 @@ http.createServer(app).listen(app.get('port'), function(){
 });
 
 //starting mail server
-require('./src/email.js').startServer();
+require('./lib/email.js').startServer();
