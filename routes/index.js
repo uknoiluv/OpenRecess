@@ -127,7 +127,8 @@ module.exports = function(app){
         return 'no such game found';
       } else {
         console.log(thisGame);
-        twil.sendSMS('Game on for ' + thisGame.gameType + '#' + thisGame.gameCode + ' on ' + moment(thisGame.gameDate).format('LL') + ' at ' + thisGame.gameTime + '. Stay tuned for more text message updates.', digits, twilioPhoneNumber);
+        //twil.sendSMS('Game on for ' + thisGame.gameType + '#' + thisGame.gameCode + ' on ' + moment(thisGame.gameDate).format('LL') + ' at ' + thisGame.gameTime + '. Stay tuned for more text message updates.', digits, twilioPhoneNumber);
+
         async.parallel({
           'game':function(cb){
             cb(null, thisGame);
