@@ -6,7 +6,7 @@ var passport = require('passport'),
     config = require('../config/config.js'),
     teams = require('./teams.js'),
     async = require('async'),
-    email = require('./lib/email.js');
+    email = require('../lib/email.js');
 
 module.exports = function(app){
   var db = app.set('db');
