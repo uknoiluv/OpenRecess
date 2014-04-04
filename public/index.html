@@ -26,6 +26,10 @@
   </head>
   <body ng-controller="mainController">
     <p>{{text}}</p>
-    <div ui-view></div>
+    <ui-view></ui-view>
+      <a ui-sref=".splashing">splashing</a>
+      <a ui-sref=".splashed">splashed</a>
+
+    <!-- </div> -->
   </body>
 </html>

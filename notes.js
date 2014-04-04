@@ -1,9 +1,19 @@
-angular.module('angularAppRoutes', ['ui.router'])
-.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-  $stateProvider
-  //splash page
+angular.module('myApp', [
+  'myApp.controllers'
+]);
 
-  .state('splash', {
+// another file
+angular.module('myApp.controllers', []);
+;
+// another
+angular.module('myApp.controllers')
+
+.controller('firstController', [$scope, function($scope) {
+  $scope.firstName = 'Emily';
+}]);
+
+
+ .state('splash', {
     url: '/splash',
     templateUrl: 'js/angular_views/splash.html'
   })
