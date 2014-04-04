@@ -45,6 +45,11 @@ app.use(require('stylus').middleware({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// //added to accomodate angular
+// app.get('/splash', function(req, res) {
+//   res.sendfile('./public/angular_views'); // load the single view file (angular will handle the page changes on the front-end)
+// });
+
 passport.serializeUser(function(user, done) {
   console.log('User serialize');
   console.log(user);
