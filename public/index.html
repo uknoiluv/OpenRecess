@@ -25,10 +25,18 @@
     <script type="text/javascript" src="/js/controllers/splashController.js"></script>
   </head>
   <body ng-controller="mainController">
+    <div>
+    nav bar
+      <a ui-sref=".seeAvailableGames">See Available Games</a>
+      <a ui-sref=".startNewGames">Start a New Game</a>
+      <a ui-sref=".manageGames">Manage Games</a>
+      <a ui-sref=".home"> Home </a>
+    </div>
+    <div ui-view> </div>
     <p>{{text}}</p>
-    <ui-view></ui-view>
+<!--     <ui-view></ui-view>
       <a ui-sref=".splashing">splashing</a>
-      <a ui-sref=".splashed">splashed</a>
+      <a ui-sref=".splashed">splashed</a> -->
 
     <!-- </div> -->
   </body>

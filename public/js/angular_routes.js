@@ -3,27 +3,36 @@ angular.module('angularAppRoutes', ['ui.router'])
   $stateProvider
   //splash page
 
-  .state('splash', {
-    url: '/splash',
-    templateUrl: 'js/angular_views/splash.html'
-  })
-  .state('splash.nested', {
-    url: '/nested',
-    views: {
-      'doodles': {
-        template: '<h1>sakdjflkasjdfldjsaf</h1>'
-      }
-    }
-  })
+  // .state('navBar',{
+  //   url: '/nav/:navId',
+  //   template: '<div><h1>Navigation Bar</h1></div>\
+  //           <a ui-sref="navBar.menu">Menu</a>\
+  //           <div ui-view></div>\
+  //           </div>',
+  //   controller: function($scope, $stateParams) {
+  //     $scope.navId = $stateParams.navId
+  //   }
+  // })
 
-  .state('splashing', {
-    url: '/splashing',
-    templateUrl: 'js/angular_views/splashing.html'
+  .state('/', {
+    url: 'index.html',
+    templateUrl: 'index.html'
   })
-
-  .state('splashed', {
-    url: '/splashed',
-    templateUrl: 'js/angular_views/splashed.html'
+  .state('seeAvailableGames', {
+    url: '/availableGames',
+    templateUrl: 'js/angular_views/availableGames.html'
+  })
+  .state('startNewGames', {
+    url: '/startNewGames',
+    templateUrl: 'js/angular_views/startNewGames.html'
+  })
+  .state('manageGames', {
+    url: '/manageGames',
+    templateUrl: 'js/angular_views/manageGames.html'
+  })
+  .state('home', {
+    url: '/',
+    template: '<h1>home</h1>'
   });
   $urlRouterProvider.otherwise('/angular_index.html');
 }]);
